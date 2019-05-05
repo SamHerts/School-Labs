@@ -1,5 +1,4 @@
 Created by: Samuel Herts
-LATE CREDIT USED FOR THIS LAB, submitted within 24 hours of original due date
 All code came from myself, references were from cplusplus and textbook.
 
 
