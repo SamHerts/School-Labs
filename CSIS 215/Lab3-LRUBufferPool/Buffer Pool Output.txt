@@ -1,0 +1,18 @@
+/* Assuming you initialize your buffer pool with blocks 0-4 and 
+ * open the test file as a binary file, your output for the first
+ * three tests (file position 5030, 16500, and 24640) should look 
+ * like the following:
+*/
+
+My data for block 1 is: "ment all o"
+My buffer block order from most recently used to LRU is:
+        1, 0, 2, 3, 4, 
+
+My data for block 4 is: "e for the "
+My buffer block order from most recently used to LRU is:
+        4, 1, 0, 2, 3, 
+
+My data for block 6 is: "ent a Buff"
+My buffer block order from most recently used to LRU is:
+        6, 4, 1, 0, 2, 
+
