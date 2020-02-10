@@ -1,0 +1,61 @@
+.pos 0
+Init: #Set up stack and array
+    irmovl Stack, %ebp		#Set Stack Pointer
+    irmovl Stack, %esp		#Set Stack Pointer
+    irmovl MyArray, %edx 	#Store start of Array in EDX
+    irmovl $0x04, %edi 		#size of .long in EDI
+    irmovl $0x1c, %esi 		#size of array in ESI
+    addl %edx, %esi			#Get end of Array in ESI
+    call Main
+    halt
+    
+Main:    
+    pushl %edx				#Compare ESI endpoint with start of array
+    subl %esi, %edx			#
+    popl %edx				#
+    je DecreaseArraySize	#If start and end are equal, decrement array size
+    mrmovl (%edx), %eax		#Read in front value into EAX
+    addl %edi, %edx			#Increment array pointer
+    mrmovl (%edx), %ebx		#Read in back value into EBX
+    call CompareAB			#Compare front and back	
+    jge Swap				#If front > back, swap them in the array 
+    jmp Main				#Loop
+
+DecreaseArraySize:
+    irmovl MyArray, %edx	#Store start of Array in EDX
+    subl %edi, %esi			#Decrement End of Array to denote the final Element as sorted
+    subl %esi, %edx			#Check if Array has been fully sorted
+    je End					#
+    irmovl MyArray, %edx	#Restore start of Array in EDX (Quicker than push/pop)
+    jmp Main				#Return to Main
+   
+   
+CompareAB:					
+    pushl %eax				#Save Right hand Operator
+    subl %ebx, %eax			#Compare EAX to EBX	
+    popl %eax				#Return EAX to original value
+    ret
+    
+Swap:
+    subl %edi, %edx			#Move Array Pointer back
+    rmmovl %ebx, (%edx)		#Write Back Value to Front location
+    addl %edi, %edx			#Increment Array Pointer	
+    rmmovl %eax, (%edx)		#Write Front Value to Back location
+    jmp Main				#Return to Main
+    
+End:
+    ret
+    
+    
+.pos 0xf0
+Stack:
+.pos 0x8c
+MyArray:					#List of 8 Long Integers, if size changes, make note in ESI
+.long 0x100
+.long 0x45
+.long 0x141
+.long 0x67
+.long 0x4
+.long 0x400
+.long 0x401
+.long 0x399    
