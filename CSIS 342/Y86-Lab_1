@@ -1,0 +1,46 @@
+.pos 0
+Init:
+    irmovl Stack, %ebp //set stack
+    irmovl Stack, %esp //set stack
+    irmovl string, %eax //store size of array
+    irmovl $0x4, %ecx //store size of long
+    
+Start:
+    mrmovl (%eax), %ebx
+    pushl %ebx
+    addl %ecx, %eax
+    irmovl 0x54, %edx
+    subl %eax, %edx
+    jne Start
+    jmp Search
+    
+
+    
+.pos 0x0040
+string:
+.long 0x6d
+.long 0x65
+.long 0x72
+.long 0x72
+.long 0x79
+
+.pos 0x0080
+Stack:
+
+.pos 0x0090
+Search:
+    irmovl 0x00, %ebx //#clear register b
+Loop:
+    popl %eax   //store first value of array
+    pushl %eax  //CMP EAX, EBX
+    subl %ebx, %eax //cmp EAX, EBX
+    popl %eax   //CMP EAX, EBX
+    cmovg %eax, %ebx //move if EAX is greater than EBX
+    pushl %ebp //cmp esp, ebp
+    subl %esp, %ebp //CMP esp, ebp
+    popl %ebp // //cmp esp, ebp
+    jne Loop // jump if array is not empty
+    subl %eax, %eax // clear EAX 
+    rmmovl %ebx, (%eax) //move greatest value to memory location 0x0
+    halt
+
